@@ -40,6 +40,7 @@ export default function SignupPage() {
         router.push("/dashboard");
       }, 2000);
     } catch (err) {
+      console.error("Login error:", err);
       setError("Sign-up failed. Please try again.");
     }
   };

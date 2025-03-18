@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import axios from "axios";
 import { Calendar, Clock, Edit2, Flag, Trash2 } from "lucide-react";
 import { deleteTodo, fetchTodoById } from "@/api";
 
@@ -32,6 +31,7 @@ export default function TodoPage() {
         const todoData = await fetchTodoById(id);
         setTodo(todoData);
       } catch (err) {
+        console.error("Error:", err);
         setError("Failed to load todo. Please try again.");
       } finally {
         setLoading(false);

@@ -2,6 +2,19 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
 
+interface Todo {
+  userId: string;
+  _id: string;
+  id: string;
+  title: string;
+  description: string;
+  status: "pending" | "completed";
+  priority: "low" | "medium" | "high";
+  dueDate: string;
+  createdAt: string;
+  
+}
+
 // Get token from localStorage
 const getAuthHeader = () => {
     const token = localStorage.getItem("token");
@@ -19,14 +32,16 @@ const getAuthHeader = () => {
       // ✅ Ensure it's always an array
       const todosArray = Array.isArray(response.data) ? response.data : [];
 
-      const todos = todosArray.map((todo: any) => ({
-        id: todo._id || todo.id, // ✅ This ensures id is mapped correctly
+      const todos = todosArray.map((todo: Todo) => ({
+        id: todo._id || todo.id, 
         title: todo.title,
         description: todo.description,
         dueDate: todo.dueDate,
-        priority: todo.priority,
-        status: todo.status,
+        status: todo.status as "pending" | "completed", // Type assertion
+        priority: todo.priority as "low" | "medium" | "high", // Type assertion
         userId: todo.userId,
+        createdAt: todo.createdAt,
+        _id: todo._id || todo.id,
       }));
 
       return todos;
@@ -53,7 +68,7 @@ export const fetchTodoById = async (id: string) => {
   };
 
   // 🔹 Update a Todo by ID
-export const updateTodo = async (id: string, updatedTodo: any) => {
+export const updateTodo = async (id: string, updatedTodo: { title?: string; description?: string; dueDate?: string; priority?: string; status?: string }) => {
     try {
       const response = await axios.put(`${API_BASE_URL}/todos/${id}`, updatedTodo, {
         headers: getAuthHeader(),
@@ -67,20 +82,25 @@ export const updateTodo = async (id: string, updatedTodo: any) => {
     }
   };
 
-// 🔹 Delete a Todo by ID
-export const deleteTodo = async (id: string) => {
+  export const deleteTodo = async (id: string) => {
     try {
       await axios.delete(`${API_BASE_URL}/todos/${id}`, { headers: getAuthHeader() });
-  
       return { success: true };
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error deleting todo:", error);
+  
+      // 🔹 Type assertion to safely access response data
+      const errorMessage =
+        (error as { response?: { data?: { message?: string } } }).response?.data?.message ||
+        "Failed to delete todo. Please try again.";
+  
       return {
         success: false,
-        message: error.response?.data?.message || "Failed to delete todo. Please try again.",
+        message: errorMessage,
       };
     }
   };
+  
 // 🔹 Create a Todo (Authenticated)
 export const createTodo = async (title: string, description: string, dueDate: string, priority: string) => {
     try {

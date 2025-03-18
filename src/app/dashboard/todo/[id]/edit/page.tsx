@@ -29,6 +29,7 @@ export default function EditTodoPage() {
         const data = await fetchTodoById(id);
         setTodo(data);
       } catch (err) {
+        console.error("Error:", err);
         setError("Failed to load todo data");
       } finally {
         setLoading(false);
@@ -49,6 +50,7 @@ export default function EditTodoPage() {
       alert("Todo updated successfully!");
       window.history.back();
     } catch (err) {
+      console.error("error:", err);
       alert("Failed to update todo");
     }
   };

@@ -25,15 +25,15 @@ export default function DashboardPage() {
   useEffect(() => {
     const getTodos = async () => {
       const fetchedTodos = await fetchTodos();
-      const todos: Todo[] = fetchedTodos.map((todo: any) => ({
+      const todos: Todo[] = fetchedTodos.map((todo) => ({
         _id: todo._id,
         id: todo.id,
+        createdAt: todo.createdAt,
         title: todo.title,
         description: todo.description,
         status: todo.status,
         priority: todo.priority,
         dueDate: todo.dueDate,
-        createdAt: todo.createdAt,
       }));
       console.log("🔍 Todos in Dashboard:", todos); 
       setTodos(todos);
@@ -41,7 +41,7 @@ export default function DashboardPage() {
     getTodos();
   }, []);
   
-
+  
   const handleStatusChange = (id: string, newStatus: "pending" | "completed") => {
     setTodos((prevTodos) => {
       const updatedTodos = prevTodos.map((todo) =>
