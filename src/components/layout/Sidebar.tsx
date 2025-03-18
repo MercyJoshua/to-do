@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, Settings, LogOut } from "lucide-react";
+import { Home, LogOut } from "lucide-react";
 import { logoutUser } from "@/api"; // Import the logout function
 import { useState } from "react";
 
