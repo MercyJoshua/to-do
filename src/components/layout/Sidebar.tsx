@@ -8,7 +8,7 @@ import { useState } from "react";
 
 const menuItems = [
   { title: "Dashboard", href: "/dashboard", icon: <Home className="w-5 h-5" /> },
-  { title: "Settings", href: "/dashboard/settings", icon: <Settings className="w-5 h-5" /> },
+ 
 ];
 
 export default function Sidebar() {
